@@ -12,6 +12,7 @@ import gevent
 from flask import Flask, render_template, request
 from flask_sockets import Sockets
 from tinydb import TinyDB
+import datetime
 
 REDIS_URL = os.environ['REDIS_URL']
 REDIS_CHAN = 'chat'
@@ -41,9 +42,11 @@ class ChatBackend(object):
 
     def register(self, client):
         """Register a WebSocket connection for Redis updates."""
-        self.clients.append(client)
+        connection_id = db.insert({'connection_time':datetime.datetime.now()})
+        self.clients.append({connection_id:client})
+        return connection_id
 
-    def send(self, client, data):
+    def send(self, client, connection_id, data):
         """Send given data to the registered client.
         Automatically discards invalid connections."""
         print('Sending')
@@ -54,13 +57,14 @@ class ChatBackend(object):
             print('Removing Clients')
             client.close()
             self.clients.remove(client)
+            db.remove(eids=[connection_id])
 
     def run(self):
         """Listens for new messages in Redis, and sends them to clients."""
         print('Running')
         for data in self.__iter_data():
-            for client in self.clients:
-                gevent.spawn(self.send, client, data)
+            for connection_id,client in self.clients.iter():
+                gevent.spawn(self.send, client, connection_id, data)
 
     def start(self):
         """Maintains Redis subscription in the background."""
@@ -81,7 +85,8 @@ def open():
         print('No box ID')
         return 'False'
     print(chats.clients)
-    if len(chats.clients):
+    print(db.all())
+    if len(db.all()):
         print('Looking at clientss')
         for client in chats.clients:
             print('A cleint!')
@@ -98,10 +103,11 @@ def open():
 def outbox(ws):
     print('receive')
     """Sends outgoing chat messages, via `ChatBackend`."""
-    chats.register(ws)
+    connection_id = chats.register(ws)
     while not ws.closed:
         # Context switch while `ChatBackend.start` is running in the background.
         gevent.sleep(0.1)
+    db.remove(eids=[connection_id])
 
 
 '''
