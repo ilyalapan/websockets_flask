@@ -30,7 +30,7 @@ class ChatBackend(object):
     """Interface for registering and updating WebSocket clients."""
 
     def __init__(self):
-        self.clients = list()
+        self.clients = {}
         self.pubsub = redis.pubsub()
         self.pubsub.subscribe(REDIS_CHAN)
 
@@ -44,12 +44,13 @@ class ChatBackend(object):
     def register(self, client):
         """Register a WebSocket connection for Redis updates."""
         connection_id = db.insert({'connection_time':str(datetime.datetime.now())})
-        self.clients.append({connection_id:client})
+        self.clients[connection_id] = client
         return connection_id
 
-    def send(self, client, connection_id, data):
+    def send(self, client_dict, connection_id, data):
         """Send given data to the registered client.
         Automatically discards invalid connections."""
+        connection_id = client_dict[]
         print('Sending')
         try:
             client.send(data)
@@ -64,8 +65,8 @@ class ChatBackend(object):
         """Listens for new messages in Redis, and sends them to clients."""
         print('Running')
         for data in self.__iter_data():
-            for connection_id,client in self.clients.iter():
-                gevent.spawn(self.send, client, connection_id, data)
+            for connection_id,client_dict in self.clients.iter():
+                gevent.spawn(self.send, client_dict, connection_id, data)
 
     def start(self):
         """Maintains Redis subscription in the background."""
