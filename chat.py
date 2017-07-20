@@ -68,9 +68,17 @@ chats.start()
 def hello():
     return render_template('index.html')
 
-@app.route('/open')
+@app.route('/open', methods=['POST'])
 def open():
-    return 'Success'
+    box_id=request.form['box_id']
+    if not box_id:
+        return 'Missing \'Box ID\' '
+    if len(chats.clients):
+        for client in chats.clients:
+            response_dict = {'box_id' : box_id}
+            cleint.send(json.dumps(response_dict))
+        return 'True'
+    return 'False'
 
 @sockets.route('/submit')
 def inbox(ws):
