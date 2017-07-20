@@ -57,6 +57,7 @@ class ChatBackend(object):
 
     def run(self):
         """Listens for new messages in Redis, and sends them to clients."""
+        print('Running')
         for data in self.__iter_data():
             for client in self.clients:
                 gevent.spawn(self.send, client, data)
@@ -92,6 +93,18 @@ def open():
         return 'True'
     return 'False'
 
+
+@sockets.route('/receive')
+def outbox(ws):
+    print('receive')
+    """Sends outgoing chat messages, via `ChatBackend`."""
+    chats.register(ws)
+    while not ws.closed:
+        # Context switch while `ChatBackend.start` is running in the background.
+        gevent.sleep(0.1)
+
+
+'''
 @sockets.route('/submit')
 def inbox(ws):
     print('submit')
@@ -104,16 +117,6 @@ def inbox(ws):
         if message:
             app.logger.info(u'Insertingg message: {}'.format(message))
             redis.publish(REDIS_CHAN, message)
-
-@sockets.route('/receive')
-def outbox(ws):
-    print('receive')
-    """Sends outgoing chat messages, via `ChatBackend`."""
-    chats.register(ws)
-    while not ws.closed:
-        # Context switch while `ChatBackend.start` is running in the background.
-        gevent.sleep(0.1)
-    print('Websocket closed')
-
+'''
 
 
