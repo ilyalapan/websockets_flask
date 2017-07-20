@@ -52,6 +52,7 @@ class ChatBackend(object):
         except Exception, e:
             print(e)
             print('Removing Clients')
+            self.clients.close()
             self.clients.remove(client)
 
     def run(self):
