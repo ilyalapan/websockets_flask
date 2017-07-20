@@ -11,7 +11,6 @@ import redis
 import gevent
 from flask import Flask, render_template, request
 from flask_sockets import Sockets
-import 
 from tinydb import TinyDB
 
 REDIS_URL = os.environ['REDIS_URL']
