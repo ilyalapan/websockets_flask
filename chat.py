@@ -48,7 +48,9 @@ class ChatBackend(object):
         Automatically discards invalid connections."""
         try:
             client.send(data)
-        except Exception:
+        except Exception, e:
+            print(e)
+            print('Removing Clients')
             self.clients.remove(client)
 
     def send_all(self, data):
@@ -101,7 +103,7 @@ def inbox(ws):
         message = ws.receive()
 
         if message:
-            app.logger.info(u'Inserting message: {}'.format(message))
+            app.logger.info(u'Insertingg message: {}'.format(message))
             redis.publish(REDIS_CHAN, message)
 
 @sockets.route('/receive')
