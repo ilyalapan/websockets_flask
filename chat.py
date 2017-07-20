@@ -13,6 +13,7 @@ from flask import Flask, render_template, request
 from flask_sockets import Sockets
 from tinydb import TinyDB
 import datetime
+import json
 
 REDIS_URL = os.environ['REDIS_URL']
 REDIS_CHAN = 'chat'
