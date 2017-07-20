@@ -51,7 +51,9 @@ class ChatBackend(object):
             self.clients.remove(client)
 
     def send_all(self, data):
+        print('send_all')
         for client in self.clients:
+            print('client!!!')
             gevent.spawn(self.send, client, data)
 
     def run(self):
@@ -74,11 +76,14 @@ def hello():
 
 @app.route('/open', methods=['POST'])
 def open():
+    print('Open')
     box_id=request.form['box_id']
     if not box_id:
         return 'False'
     if len(chats.clients):
+        print('Looking at clientss')
         for client in chats.clients:
+            print('Made a response dict')
             response_dict = {'box_id' : box_id}
             chats.send_all(json.dumps(response_dict))
         return 'True'
