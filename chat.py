@@ -57,7 +57,7 @@ class ChatBackend(object):
             print(e)
             print('Removing Clients')
             client.close()
-            self.clients.remove(client)
+            self.clients[connection_id] = None
             db.remove(eids=[connection_id])
 
     def run(self):
