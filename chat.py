@@ -11,7 +11,8 @@ import redis
 import gevent
 from flask import Flask, render_template, request
 from flask_sockets import Sockets
-import json
+import 
+from tinydb import TinyDB
 
 REDIS_URL = os.environ['REDIS_URL']
 REDIS_CHAN = 'chat'
@@ -22,7 +23,7 @@ app.debug = 'DEBUG' in os.environ
 sockets = Sockets(app)
 redis = redis.from_url(REDIS_URL)
 
-
+db = TinyDB('db.json')
 
 class ChatBackend(object):
     """Interface for registering and updating WebSocket clients."""
