@@ -50,6 +50,10 @@ class ChatBackend(object):
         except Exception:
             self.clients.remove(client)
 
+    def send_all(self, data):
+        for client in self.clients:
+            gevent.spawn(self.send, client, data)
+
     def run(self):
         """Listens for new messages in Redis, and sends them to clients."""
         for data in self.__iter_data():
@@ -72,11 +76,11 @@ def hello():
 def open():
     box_id=request.form['box_id']
     if not box_id:
-        return 'Missing \'Box ID\' '
+        return 'False'
     if len(chats.clients):
         for client in chats.clients:
             response_dict = {'box_id' : box_id}
-            cleint.send(json.dumps(response_dict))
+            chats.send_all(json.dumps(response_dict))
         return 'True'
     return 'False'
 
