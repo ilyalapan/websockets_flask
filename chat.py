@@ -65,7 +65,7 @@ class ChatBackend(object):
         """Listens for new messages in Redis, and sends them to clients."""
         print('Running')
         for data in self.__iter_data():
-            for connection_id,client_dict in self.clients.iter():
+            for connection_id,client_dict in self.clients.items():
                 gevent.spawn(self.send, client_dict, connection_id, data)
 
     def start(self):
