@@ -114,10 +114,10 @@ def outbox(ws):
     print('receive')
     """Sends outgoing chat messages, via `ChatBackend`."""
     chats.register(ws)
-
     while not ws.closed:
         # Context switch while `ChatBackend.start` is running in the background.
         gevent.sleep(0.1)
+    print('Websocket closed')
 
 
 
