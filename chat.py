@@ -82,6 +82,7 @@ def open():
 
 @sockets.route('/submit')
 def inbox(ws):
+    print('submit')
     """Receives incoming chat messages, inserts them into Redis."""
     while not ws.closed:
         # Sleep to prevent *constant* context-switches.
@@ -94,6 +95,7 @@ def inbox(ws):
 
 @sockets.route('/receive')
 def outbox(ws):
+    print('receive')
     """Sends outgoing chat messages, via `ChatBackend`."""
     chats.register(ws)
 
