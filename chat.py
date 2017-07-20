@@ -54,7 +54,6 @@ class ChatBackend(object):
     def send_all(self, data):
         print('send_all')
         for client in self.clients:
-            print('client!!!')
             gevent.spawn(self.send, client, data)
 
     def run(self):
