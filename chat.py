@@ -46,18 +46,13 @@ class ChatBackend(object):
     def send(self, client, data):
         """Send given data to the registered client.
         Automatically discards invalid connections."""
+        print('Sending')
         try:
             client.send(data)
         except Exception, e:
             print(e)
             print('Removing Clients')
             self.clients.remove(client)
-
-    def send_all(self, data):
-        print('send_all')
-        print(self.clients)
-        for client in self.clients:
-            gevent.spawn(self.send, client, data)
 
     def run(self):
         """Listens for new messages in Redis, and sends them to clients."""
@@ -92,7 +87,7 @@ def open():
             print(response_dict)
             data_string = json.dumps(response_dict)
             print('Made a response dict', data_string)
-            chats.send_all(data_string)
+            gevent.spawn(self.send, client, data_string)
         return 'True'
     return 'False'
 
