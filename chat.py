@@ -89,7 +89,6 @@ def outbox(ws):
     chats.register(ws)
     while not ws.closed:
         # Context switch while `ChatBackend.start` is running in the background.
-        print('sleep')
         gevent.sleep(0.1)
     print('Websocket closed')
 
