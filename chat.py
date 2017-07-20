@@ -87,6 +87,11 @@ def open():
         return 'False'
     print(db.all())
     if len(db.all()):
+        print('Looking at clientss')
+        response_dict = {'box_id' : box_id}
+        print(response_dict)
+        data_string = json.dumps(response_dict)
+        print('Made a response dict', data_string)
         redis.publish(REDIS_CHAN, data_string)
         return 'True'
     return 'False'
