@@ -87,7 +87,7 @@ def open():
             print(response_dict)
             data_string = json.dumps(response_dict)
             print('Made a response dict', data_string)
-            gevent.spawn(self.send, client, data_string)
+            gevent.spawn(chats.send, client, data_string)
         return 'True'
     return 'False'
 
