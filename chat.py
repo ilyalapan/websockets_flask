@@ -70,6 +70,10 @@ chats.start()
 def hello():
     return render_template('index.html')
 
+@app.route('/open')
+def hello():
+    return 'Success'
+
 @sockets.route('/submit')
 def inbox(ws):
     """Receives incoming chat messages, inserts them into Redis."""
