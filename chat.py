@@ -42,7 +42,7 @@ class ChatBackend(object):
 
     def register(self, client):
         """Register a WebSocket connection for Redis updates."""
-        connection_id = db.insert({'connection_time':datetime.datetime.now()})
+        connection_id = db.insert({'connection_time':str(datetime.datetime.now())})
         self.clients.append({connection_id:client})
         return connection_id
 
