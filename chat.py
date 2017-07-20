@@ -85,7 +85,6 @@ def open():
     if not box_id:
         print('No box ID')
         return 'False'
-    print(chats.clients)
     print(db.all())
     if len(db.all()):
         print('Looking at clientss')
