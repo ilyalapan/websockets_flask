@@ -69,7 +69,7 @@ class ChatBackend(object):
 chats = ChatBackend()
 chats.start()
 
-
+print(
 @app.route('/')
 def hello():
     return render_template('index.html')
@@ -83,9 +83,10 @@ def open():
     if len(chats.clients):
         print('Looking at clientss')
         for client in chats.clients:
-            print('Made a response dict')
             response_dict = {'box_id' : box_id}
-            chats.send_all(json.dumps(response_dict))
+            data_string = json.dumps(response_dict)
+            print('Made a response dict', data_string)
+            chats.send_all(data_string)
         return 'True'
     return 'False'
 
