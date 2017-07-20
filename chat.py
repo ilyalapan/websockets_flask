@@ -47,7 +47,7 @@ class ChatBackend(object):
         self.clients[connection_id] = client
         return connection_id
 
-    def send(self, client_dict, connection_id, data):
+    def send(self, client, connection_id, data):
         """Send given data to the registered client.
         Automatically discards invalid connections."""
         print('Sending')
@@ -64,8 +64,8 @@ class ChatBackend(object):
         """Listens for new messages in Redis, and sends them to clients."""
         print('Running')
         for data in self.__iter_data():
-            for connection_id,client_dict in self.clients.items():
-                gevent.spawn(self.send, client_dict, connection_id, data)
+            for connection_id,client in self.clients.items():
+                gevent.spawn(self.send, client, connection_id, data)
 
     def start(self):
         """Maintains Redis subscription in the background."""
