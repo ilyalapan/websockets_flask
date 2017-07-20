@@ -82,7 +82,9 @@ def open():
     if len(chats.clients):
         print('Looking at clientss')
         for client in chats.clients:
+            print('A cleint!')
             response_dict = {'box_id' : box_id}
+            print(response_dict)
             data_string = json.dumps(response_dict)
             print('Made a response dict', data_string)
             chats.send_all(data_string)
