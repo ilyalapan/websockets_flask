@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Chat Server
 ===========
@@ -71,7 +69,7 @@ def hello():
     return render_template('index.html')
 
 @app.route('/open')
-def hello():
+def open():
     return 'Success'
 
 @sockets.route('/submit')
