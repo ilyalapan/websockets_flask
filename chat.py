@@ -69,13 +69,14 @@ class ChatBackend(object):
 chats = ChatBackend()
 chats.start()
 
-print(
 @app.route('/')
 def hello():
     return render_template('index.html')
 
 @app.route('/open', methods=['POST'])
 def open():
+    i = None
+    i = i + 1
     print('Open')
     box_id=request.form['box_id']
     if not box_id:
