@@ -50,7 +50,6 @@ class ChatBackend(object):
     def send(self, client_dict, connection_id, data):
         """Send given data to the registered client.
         Automatically discards invalid connections."""
-        connection_id = client_dict[connection_id]
         print('Sending')
         try:
             client.send(data)
