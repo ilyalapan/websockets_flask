@@ -81,7 +81,9 @@ def open():
     print('Open')
     box_id=int(request.form['box_id'])
     if not box_id:
+        print('No box ID')
         return 'False'
+    print(chats.clients)
     if len(chats.clients):
         print('Looking at clientss')
         for client in chats.clients:
