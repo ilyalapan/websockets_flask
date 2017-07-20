@@ -55,7 +55,18 @@ class ChatBackend(object):
             client.close()
             self.clients.remove(client)
 
+    def run(self):
+        """Listens for new messages in Redis, and sends them to clients."""
+        for data in self.__iter_data():
+            for client in self.clients:
+                gevent.spawn(self.send, client, data)
+
+    def start(self):
+        """Maintains Redis subscription in the background."""
+        gevent.spawn(self.run)
+
 chats = ChatBackend()
+chats.start()
 
 @app.route('/')
 def hello():
@@ -77,10 +88,22 @@ def open():
             print(response_dict)
             data_string = json.dumps(response_dict)
             print('Made a response dict', data_string)
-            gevent.spawn(chats.send, client, data_string)
+            redis.publish(REDIS_CHAN, data_string)
         return 'True'
     return 'False'
 
+@sockets.route('/submit')
+def inbox(ws):
+    print('submit')
+    """Receives incoming chat messages, inserts them into Redis."""
+    while not ws.closed:
+        # Sleep to prevent *constant* context-switches.
+        gevent.sleep(0.1)
+        message = ws.receive()
+
+        if message:
+            app.logger.info(u'Insertingg message: {}'.format(message))
+            redis.publish(REDIS_CHAN, message)
 
 @sockets.route('/receive')
 def outbox(ws):
