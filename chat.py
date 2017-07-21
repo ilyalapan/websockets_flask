@@ -83,7 +83,7 @@ def open():
     print('Open')
     print('Getting Json')
     req_json = request.json
-    print('Got JSON' req_json)
+    print('Got JSON', req_json)
     box_id = req_json.get('box_id')
     if not box_id:
         r = Response(response = json.dumps({'status':False, 'comment':'No Box ID'}),status=200, mimetype="application/json")
