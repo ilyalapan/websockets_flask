@@ -43,6 +43,7 @@ class ChatBackend(object):
 
     def register(self, client):
         """Register a WebSocket connection for Redis updates."""
+        print('Registered a connection!')
         connection_id = db.insert({'connection_time':str(datetime.datetime.now())})
         self.clients[connection_id] = client
         return connection_id
@@ -56,7 +57,6 @@ class ChatBackend(object):
         except Exception, e:
             print(e)
             print('Removing Clients')
-            client.close()
             self.clients[connection_id] = None
             db.remove(eids=[connection_id])
 
@@ -99,12 +99,13 @@ def open():
 
 @sockets.route('/receive')
 def outbox(ws):
-    print('receive')
+    print('Receiving a connection!')
     """Sends outgoing chat messages, via `ChatBackend`."""
     connection_id = chats.register(ws)
     while not ws.closed:
         # Context switch while `ChatBackend.start` is running in the background.
         gevent.sleep(0.1)
+    print('Connection closed!')
     db.remove(eids=[connection_id])
 
 
