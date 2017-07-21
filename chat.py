@@ -81,7 +81,7 @@ def hello():
 @app.route('/open', methods=['POST'])
 def open():
     print('Open')
-    box_id=string(request.form['box_id'])
+    box_id=request.form['box_id']
     if not box_id:
         print('No box ID')
         return 'False'
