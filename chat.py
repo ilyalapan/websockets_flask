@@ -81,9 +81,8 @@ def hello():
 @app.route('/open', methods=['POST'])
 def open():
     print('Open')
-    print(request.get_json())
-    #box_id= request.values['box_id']
-    box_id = None
+    #print(request.get_json())
+    box_id= request.values['box_id']
     if not box_id:
         r = Response(response = json.dumps({'status':False, 'comment':'No Box ID'}),status=200, mimetype="application/json")
         return r
