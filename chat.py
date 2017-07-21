@@ -82,7 +82,7 @@ def hello():
 def open():
     print('Open')
     #r = Response(response = json.dumps({'status':False}),status=200, mimetype="application/json")
-    print(request.get_json())
+    #print(request.get_json())
     #box_id= request.values['box_id']
     if not box_id:
         print('No box ID')
