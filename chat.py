@@ -110,7 +110,7 @@ def outbox(ws):
         # Context switch while `ChatBackend.start` is running in the background.
         message = ws.receive()
         if message:
-            client.send('Pong')
+            ws.send('Pong')
         gevent.sleep(0.1)
     print('Connection closed!')
     print(db.all())
