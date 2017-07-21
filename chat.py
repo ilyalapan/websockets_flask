@@ -81,7 +81,7 @@ def hello():
 @app.route('/open', methods=['POST'])
 def open():
     print('Open')
-    r = Response(response = 'False',status=200, mimetype="application/json")
+    r = Response(response = json.dumps({'status':'False'}),status=200, mimetype="application/json")
     box_id= str(request.form.get('box_id'))
     if not box_id:
         print('No box ID')
@@ -94,7 +94,7 @@ def open():
         data_string = json.dumps(response_dict)
         print('Made a response dict', data_string)
         redis.publish(REDIS_CHAN, data_string)
-        return Response(response = 'True',status=200, mimetype="application/json")
+        return Response(response = json.dumps({'status':'True'}),status=200, mimetype="application/json")
     return r
 
 
@@ -107,6 +107,7 @@ def outbox(ws):
         # Context switch while `ChatBackend.start` is running in the background.
         gevent.sleep(0.1)
     print('Connection closed!')
+    print(db.all())
     db.remove(eids=[connection_id])
 
 
