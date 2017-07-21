@@ -108,6 +108,9 @@ def outbox(ws):
     connection_id = chats.register(ws)
     while not ws.closed:
         # Context switch while `ChatBackend.start` is running in the background.
+        message = socket.receive()
+        if message:
+            client.send('Pong')
         gevent.sleep(0.1)
     print('Connection closed!')
     print(db.all())
