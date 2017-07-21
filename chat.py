@@ -9,7 +9,7 @@ import os
 import logging
 import redis
 import gevent
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 from flask_sockets import Sockets
 from tinydb import TinyDB
 import datetime
@@ -81,10 +81,11 @@ def hello():
 @app.route('/open', methods=['POST'])
 def open():
     print('Open')
+    r = Response(response = 'False',status=200, mimetype="application/json")
     box_id= str(request.form['box_id'])
     if not box_id:
         print('No box ID')
-        return 'False'
+        return r
     print(db.all())
     if len(db.all()):
         print('Looking at clientss')
@@ -93,8 +94,8 @@ def open():
         data_string = json.dumps(response_dict)
         print('Made a response dict', data_string)
         redis.publish(REDIS_CHAN, data_string)
-        return 'True'
-    return 'False'
+        return Response(response = 'True',status=200, mimetype="application/json")
+    return r
 
 
 @sockets.route('/receive')
